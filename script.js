@@ -9,7 +9,7 @@ botaoDeBusca.addEventListener("click", async () => {
 
   const dados = await buscarDadosDaCidade(cidade);
 
-  if (dados) preencherDadosNaTela(dados);
+  if (dados) preencherDadosNaTela(dados, cidade);
 });
 
 async function buscarDadosDaCidade(cidade) {
@@ -26,16 +26,22 @@ async function buscarDadosDaCidade(cidade) {
   }
 }
 
-function preencherDadosNaTela(dados) {
+function preencherDadosNaTela(dados, nomeDigitado) {
   const temperatura = dados.current.temp_c;
   const condicao = dados.current.condition.text;
   const humidade = dados.current.humidity;
   const vento = dados.current.wind_kph;
   const sensacao = dados.current.feelslike_c;
   const icone = "https:" + dados.current.condition.icon;
-  const cidade = dados.location.name;
+  const chuva = dados.current.precip_mm;
 
-  document.getElementById("cidade").textContent = cidade;
+  const cidadeFormatada = nomeDigitado
+    .toLowerCase()
+    .split(" ")
+    .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+    .join(" ");
+
+  document.getElementById("cidade").textContent = cidadeFormatada;
   document.getElementById("temperatura").textContent = `${temperatura}°`;
   document.getElementById("condicao").textContent = condicao;
   document.getElementById("humidade").textContent = `${humidade}%`;
@@ -43,4 +49,5 @@ function preencherDadosNaTela(dados) {
   document.getElementById("sensacao").textContent = `${sensacao}°C`;
   document.getElementById("icone-condicao").src = icone;
   document.getElementById("icone-condicao").alt = condicao;
+  document.getElementById("chuva").textContent = `${chuva} mm`;
 }
